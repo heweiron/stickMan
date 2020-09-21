@@ -34,7 +34,9 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        let background = SKSpriteNode(color: .white, size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        
+        //MARK: - background init
+        let background = SKSpriteNode(color: .white, size: CGSize(width: UIScreen.main.bounds.width + 200, height: UIScreen.main.bounds.height))
         background.anchorPoint = CGPoint(x: 0, y: 0)
         addChild(background)
         
@@ -48,7 +50,12 @@ class GameScene: SKScene {
         ground.position.y = frame.minY + ground.size.height
         addChild(ground)
         
-        
+        // MARK: - 操作方向按钮
+        let runLeftButton = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        runLeftButton.name = "runLeftButton"
+        runLeftButton.position.x = frame.minX + 100
+        runLeftButton.position.y = frame.maxY - 100
+        addChild(runLeftButton)
         
         
         let runRightButton = SKSpriteNode(color: .red, size: CGSize(width: 50, height: 50))
@@ -57,6 +64,8 @@ class GameScene: SKScene {
         runRightButton.position.y = frame.maxY - 100
         addChild(runRightButton)
         
+        
+        // MARK: - Player init
         player.name = "player"
         player.position.x = frame.midX
         player.position.y = frame.minY + 400
@@ -64,7 +73,7 @@ class GameScene: SKScene {
         
         addChild(player)
         
-        player.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: player.size.height - 10))
+        player.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: player.size.height))
         player.physicsBody?.allowsRotation = false
 
         
@@ -76,9 +85,14 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if player.position.x < frame.maxX {
-            player.position.x = player.position.x + playerSpeed * 10
+        player.position.x = player.position.x + playerSpeed * 10
+        if player.position.x > frame.maxX {
+            player.position.x = frame.maxX
         }
+        if player.position.x <= frame.minX {
+            player.position.x = frame.minX
+        }
+        
     }
     
     
@@ -89,8 +103,16 @@ class GameScene: SKScene {
             let touchedNode = atPoint(location)
             if touchedNode.name == "runRightButton" {
                 // Call the function here.
-                runRight()
+                
                 playerSpeed = 1
+                runRight()
+                
+            }
+            if touchedNode.name == "runLeftButton" {
+                // Call the function here.
+                
+                playerSpeed = -1
+                runRight()
                 
             }
         }
@@ -113,7 +135,7 @@ class GameScene: SKScene {
     
     // MARK: -Control Player Functions
     
-    func runPlayer() {
+    func playerRightRun() {
         
         playerAnimationArray = [
             //SKTexture(imageNamed: "player24"),
@@ -147,20 +169,54 @@ class GameScene: SKScene {
         //        player.run(wholeAction, withKey: "playerRun")
     }
     
-    
+    func playerLeftRun() {
+        playerAnimationArray = [
+            //SKTexture(imageNamed: "lplayer24"),
+            //SKTexture(imageNamed: "lplayer02"),
+            SKTexture(imageNamed: "lplayer03"),
+            SKTexture(imageNamed: "lplayer04"),
+            SKTexture(imageNamed: "lplayer05"),
+            SKTexture(imageNamed: "lplayer06"),
+            SKTexture(imageNamed: "lplayer07"),
+            SKTexture(imageNamed: "lplayer08"),
+            SKTexture(imageNamed: "lplayer10"),
+            SKTexture(imageNamed: "lplayer11"),
+            //SKTexture(imageNamed: "lplayer12"),
+            SKTexture(imageNamed: "lplayer13"),
+            //SKTexture(imageNamed: "lplayer15"),
+            SKTexture(imageNamed: "lplayer16"),
+            SKTexture(imageNamed: "lplayer18"),
+            SKTexture(imageNamed: "lplayer19"),
+            //SKTexture(imageNamed: "lplayer20"),
+            SKTexture(imageNamed: "lplayer22"),
+            SKTexture(imageNamed: "lplayer23"),
+        ]
+        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.03)
+        let playerAnimateForever = SKAction.repeatForever(playerAnimate)
+        
+        let movePlayer = SKAction.moveBy(x: player.size.width*1.7, y: 0, duration: 3)
+        player.run(SKAction.sequence([playerAnimateForever,movePlayer, SKAction.removeFromParent()]),withKey:"playerRun")
+    }
     
     
     func runRight() {
         //        player.position.x = frame.minX + 200
         //        player.position.y = frame.minY + 400
         //        player.zPosition = 1
-        runPlayer()
+        if playerSpeed > 0 {
+            playerRightRun()
+        } else if playerSpeed < 0 {
+            playerLeftRun()
+        }
     }
     
     func stopRun() {
         player.removeAction(forKey: "playerRun")
-        player.texture = SKTexture(imageNamed: "player")
-        player.position.x = frame.midX
+        if playerSpeed > 0 {
+            player.texture = SKTexture(imageNamed: "player")
+        } else if playerSpeed < 0 {
+            player.texture = SKTexture(imageNamed: "lplayer")
+        }
     }
 }
 
