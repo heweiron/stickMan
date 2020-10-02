@@ -28,9 +28,10 @@ struct HomeView: View {
 
 class GameScene: SKScene {
     
-    let player = SKSpriteNode(imageNamed: "player")
-    var playerAnimationArray = [SKTexture(imageNamed: "player")]
+    let player = SKSpriteNode(imageNamed: "火柴人")
+    var playerAnimationArray = [SKTexture(imageNamed: "火柴人")]
     var playerSpeed: CGFloat = 0
+    var playerFaceRight = true
     
     override func didMove(to view: SKView) {
         
@@ -63,6 +64,13 @@ class GameScene: SKScene {
         runRightButton.position.x = frame.minX + 200
         runRightButton.position.y = frame.maxY - 100
         addChild(runRightButton)
+        
+        
+        let punchButton = SKSpriteNode(color: .black, size: CGSize(width: 50, height: 50))
+        punchButton.name = "punchButton"
+        punchButton.position.x = frame.minX + 300
+        punchButton.position.y = frame.maxY - 100
+        addChild(punchButton)
         
         
         // MARK: - Player init
@@ -115,6 +123,11 @@ class GameScene: SKScene {
                 runRight()
                 
             }
+            if touchedNode.name == "punchButton" {
+                // Call the function here.
+                punch()
+                
+            }
         }
     }
     
@@ -136,29 +149,21 @@ class GameScene: SKScene {
     // MARK: -Control Player Functions
     
     func playerRightRun() {
-        
+
         playerAnimationArray = [
-            //SKTexture(imageNamed: "player24"),
-            //SKTexture(imageNamed: "player02"),
-            SKTexture(imageNamed: "player03"),
-            SKTexture(imageNamed: "player04"),
-            SKTexture(imageNamed: "player05"),
-            SKTexture(imageNamed: "player06"),
-            SKTexture(imageNamed: "player07"),
-            SKTexture(imageNamed: "player08"),
-            SKTexture(imageNamed: "player10"),
-            SKTexture(imageNamed: "player11"),
-            //SKTexture(imageNamed: "player12"),
-            SKTexture(imageNamed: "player13"),
-            //SKTexture(imageNamed: "player15"),
-            SKTexture(imageNamed: "player16"),
-            SKTexture(imageNamed: "player18"),
-            SKTexture(imageNamed: "player19"),
-            SKTexture(imageNamed: "player20"),
-            SKTexture(imageNamed: "player22"),
-            SKTexture(imageNamed: "player23"),
+            SKTexture(imageNamed: "火柴人跑01"),
+            SKTexture(imageNamed: "火柴人跑02"),
+            SKTexture(imageNamed: "火柴人跑03"),
+            SKTexture(imageNamed: "火柴人跑04"),
+            SKTexture(imageNamed: "火柴人跑05"),
+            SKTexture(imageNamed: "火柴人跑04"),
+            SKTexture(imageNamed: "火柴人跑03"),
+            SKTexture(imageNamed: "火柴人跑02"),
+            SKTexture(imageNamed: "火柴人跑01"),
+
         ]
-        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.03)
+        
+        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
         let playerAnimateForever = SKAction.repeatForever(playerAnimate)
         
         let movePlayer = SKAction.moveBy(x: player.size.width*1.7, y: 0, duration: 3)
@@ -171,31 +176,52 @@ class GameScene: SKScene {
     
     func playerLeftRun() {
         playerAnimationArray = [
-            //SKTexture(imageNamed: "lplayer24"),
-            //SKTexture(imageNamed: "lplayer02"),
-            SKTexture(imageNamed: "lplayer03"),
-            SKTexture(imageNamed: "lplayer04"),
-            SKTexture(imageNamed: "lplayer05"),
-            SKTexture(imageNamed: "lplayer06"),
-            SKTexture(imageNamed: "lplayer07"),
-            SKTexture(imageNamed: "lplayer08"),
-            SKTexture(imageNamed: "lplayer10"),
-            SKTexture(imageNamed: "lplayer11"),
-            //SKTexture(imageNamed: "lplayer12"),
-            SKTexture(imageNamed: "lplayer13"),
-            //SKTexture(imageNamed: "lplayer15"),
-            SKTexture(imageNamed: "lplayer16"),
-            SKTexture(imageNamed: "lplayer18"),
-            SKTexture(imageNamed: "lplayer19"),
-            //SKTexture(imageNamed: "lplayer20"),
-            SKTexture(imageNamed: "lplayer22"),
-            SKTexture(imageNamed: "lplayer23"),
+            SKTexture(imageNamed: "火柴人跑左01"),
+            SKTexture(imageNamed: "火柴人跑左02"),
+            SKTexture(imageNamed: "火柴人跑左03"),
+            SKTexture(imageNamed: "火柴人跑左04"),
+            SKTexture(imageNamed: "火柴人跑左05"),
+            SKTexture(imageNamed: "火柴人跑左04"),
+            SKTexture(imageNamed: "火柴人跑左03"),
+            SKTexture(imageNamed: "火柴人跑左02"),
+            SKTexture(imageNamed: "火柴人跑左01"),
         ]
-        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.03)
+        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
         let playerAnimateForever = SKAction.repeatForever(playerAnimate)
         
         let movePlayer = SKAction.moveBy(x: player.size.width*1.7, y: 0, duration: 3)
         player.run(SKAction.sequence([playerAnimateForever,movePlayer, SKAction.removeFromParent()]),withKey:"playerRun")
+    }
+    
+    
+    func playerRightPunch() {
+
+        playerAnimationArray = [
+            SKTexture(imageNamed: "火柴人01"),
+            SKTexture(imageNamed: "火柴人02"),
+            SKTexture(imageNamed: "火柴人03"),
+            SKTexture(imageNamed: "火柴人04"),
+            SKTexture(imageNamed: "火柴人05"),
+
+        ]
+        
+        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
+        player.run(playerAnimate, withKey: "playerPunch")
+    }
+    
+    func playerLeftPunch() {
+
+        playerAnimationArray = [
+            SKTexture(imageNamed: "火柴人左01"),
+            SKTexture(imageNamed: "火柴人左02"),
+            SKTexture(imageNamed: "火柴人左03"),
+            SKTexture(imageNamed: "火柴人左04"),
+            SKTexture(imageNamed: "火柴人左05"),
+
+        ]
+        
+        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
+        player.run(playerAnimate, withKey: "playerLeftPunch")
     }
     
     
@@ -213,10 +239,21 @@ class GameScene: SKScene {
     func stopRun() {
         player.removeAction(forKey: "playerRun")
         if playerSpeed > 0 {
-            player.texture = SKTexture(imageNamed: "player")
+            player.texture = SKTexture(imageNamed: "火柴人")
+            playerFaceRight = true
         } else if playerSpeed < 0 {
-            player.texture = SKTexture(imageNamed: "lplayer")
+            player.texture = SKTexture(imageNamed: "火柴人左")
+            playerFaceRight = false
         }
+    }
+    
+    func punch() {
+        if playerFaceRight {
+            playerRightPunch()
+        } else {
+            playerLeftPunch()
+        }
+
     }
 }
 
