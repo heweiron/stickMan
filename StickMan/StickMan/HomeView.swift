@@ -43,7 +43,7 @@ class GameScene: SKScene {
         
         
         
-        let ground = SKSpriteNode(color: UIColor(Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))), size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height/10))
+        let ground = SKSpriteNode(color: UIColor(Color(#colorLiteral(red: 0.4388668537, green: 0.8085464239, blue: 0.2202020884, alpha: 0.7059342894))), size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height/10))
         
         ground.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: ground.size.width, height: ground.size.height))
         ground.physicsBody?.isDynamic = false
@@ -52,24 +52,25 @@ class GameScene: SKScene {
         addChild(ground)
         
         // MARK: - 操作方向按钮
-        let runLeftButton = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        let runLeftButton = SKSpriteNode(imageNamed: "leftArrow")
+        
         runLeftButton.name = "runLeftButton"
-        runLeftButton.position.x = frame.minX + 100
-        runLeftButton.position.y = frame.maxY - 100
+        runLeftButton.position.x = frame.minX + 50
+        runLeftButton.position.y = frame.minY + 100
         addChild(runLeftButton)
         
         
-        let runRightButton = SKSpriteNode(color: .red, size: CGSize(width: 50, height: 50))
+        let runRightButton = SKSpriteNode(imageNamed: "rightArrow")
         runRightButton.name = "runRightButton"
-        runRightButton.position.x = frame.minX + 200
-        runRightButton.position.y = frame.maxY - 100
+        runRightButton.position.x = frame.minX + 150
+        runRightButton.position.y = frame.minY + 100
         addChild(runRightButton)
         
         
         let punchButton = SKSpriteNode(color: .black, size: CGSize(width: 50, height: 50))
         punchButton.name = "punchButton"
         punchButton.position.x = frame.minX + 300
-        punchButton.position.y = frame.maxY - 100
+        punchButton.position.y = frame.minY + 120
         addChild(punchButton)
         
         
