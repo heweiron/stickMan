@@ -67,7 +67,7 @@ class GameScene: SKScene {
         runRightButton.position.y = frame.minY + 100
         addChild(runRightButton)
         
-        
+        // MARK: - 动作按钮
         let punchButton = SKSpriteNode(color: .black, size: CGSize(width: 50, height: 50))
         punchButton.name = "punchButton"
         punchButton.position.x = frame.minX + 300
@@ -102,6 +102,7 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         
+        // MARK: -player movement
         // if player is not jump
         if player.position.y <= frame.minY + UIScreen.main.bounds.height/10 + player.size.height/2 + 45.1 {
             player.position.x = player.position.x + playerSpeed * 10
@@ -118,7 +119,7 @@ class GameScene: SKScene {
     }
     
     
-    
+    // MARK:- Button handler
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
@@ -127,14 +128,14 @@ class GameScene: SKScene {
                 // Call the function here.
                 
                 playerSpeed = 1
-                runRight()
+                run()
                 
             }
             if touchedNode.name == "runLeftButton" {
                 // Call the function here.
                 
                 playerSpeed = -1
-                runRight()
+                run()
                 
             }
             if touchedNode.name == "punchButton" {
@@ -164,10 +165,8 @@ class GameScene: SKScene {
         }
     }
     
-    
-    
-    // MARK: -Control Player Functions
-    
+    // MARK: -Animation Functions
+    // MARK: -跑步动画
     func playerRightRun() {
         if player.position.y <= frame.minY + UIScreen.main.bounds.height/10 + player.size.height/2 + 45.1 {
             playerAnimationArray = [
@@ -197,7 +196,7 @@ class GameScene: SKScene {
         //        let wholeAction = SKAction.group([playerAnimateForever, moveAndRemoveSequence])
         //        player.run(wholeAction, withKey: "playerRun")
     }
-    
+
     func playerLeftRun() {
         
         if player.position.y <= frame.minY + UIScreen.main.bounds.height/10 + player.size.height/2 + 45.1 {
@@ -224,7 +223,7 @@ class GameScene: SKScene {
         player.run(SKAction.sequence([playerAnimateForever,movePlayer, SKAction.removeFromParent()]),withKey:"playerRun")
     }
     
-    
+    // MARK: -攻击动画
     func playerRightPunch() {
 
         playerAnimationArray = [
@@ -257,6 +256,8 @@ class GameScene: SKScene {
         player.run(playerAnimate, withKey: "playerLeftPunch")
     }
     
+    
+    // MARK: -跳跃动画
     func playerRightJump() {
 
         playerAnimationArray = [
@@ -291,11 +292,8 @@ class GameScene: SKScene {
 
     }
     
-    
-    func runRight() {
-        //        player.position.x = frame.minX + 200
-        //        player.position.y = frame.minY + 400
-        //        player.zPosition = 1
+    // MARK:- player control functions
+    func run() {
         if playerSpeed > 0 {
             playerRightRun()
         } else if playerSpeed < 0 {
