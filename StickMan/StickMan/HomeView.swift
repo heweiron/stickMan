@@ -32,6 +32,7 @@ class GameScene: SKScene {
     var playerAnimationArray = [SKTexture(imageNamed: "火柴人")]
     var playerSpeed: CGFloat = 0
     var playerFaceRight = true
+
     
     override func didMove(to view: SKView) {
         
@@ -73,6 +74,12 @@ class GameScene: SKScene {
         punchButton.position.y = frame.minY + 120
         addChild(punchButton)
         
+        let jumpButton = SKSpriteNode(color: .red, size: CGSize(width: 50, height: 50))
+        jumpButton.name = "jumpButton"
+        jumpButton.position.x = frame.minX + 360
+        jumpButton.position.y = frame.minY + 120
+        addChild(jumpButton)
+        
         
         // MARK: - Player init
         player.name = "player"
@@ -94,7 +101,13 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        player.position.x = player.position.x + playerSpeed * 10
+        
+        // if player is not jump
+        if player.position.y <= frame.minY + UIScreen.main.bounds.height/10 + player.size.height/2 + 45.1 {
+            player.position.x = player.position.x + playerSpeed * 10
+        } else { // player is jumped
+            player.position.x = player.position.x + playerSpeed * 6
+        }
         if player.position.x > frame.maxX {
             player.position.x = frame.maxX
         }
@@ -129,6 +142,12 @@ class GameScene: SKScene {
                 punch()
                 
             }
+            
+            if touchedNode.name == "jumpButton" {
+                // Call the function here.
+                jump()
+                
+            }
         }
     }
     
@@ -150,24 +169,28 @@ class GameScene: SKScene {
     // MARK: -Control Player Functions
     
     func playerRightRun() {
-
-        playerAnimationArray = [
-            SKTexture(imageNamed: "火柴人跑01"),
-            SKTexture(imageNamed: "火柴人跑02"),
-            SKTexture(imageNamed: "火柴人跑03"),
-            SKTexture(imageNamed: "火柴人跑04"),
-            SKTexture(imageNamed: "火柴人跑05"),
-            SKTexture(imageNamed: "火柴人跑04"),
-            SKTexture(imageNamed: "火柴人跑03"),
-            SKTexture(imageNamed: "火柴人跑02"),
-            SKTexture(imageNamed: "火柴人跑01"),
-
-        ]
-        
+        if player.position.y <= frame.minY + UIScreen.main.bounds.height/10 + player.size.height/2 + 45.1 {
+            playerAnimationArray = [
+                SKTexture(imageNamed: "火柴人跑01"),
+                SKTexture(imageNamed: "火柴人跑02"),
+                SKTexture(imageNamed: "火柴人跑03"),
+                SKTexture(imageNamed: "火柴人跑04"),
+                SKTexture(imageNamed: "火柴人跑05"),
+                SKTexture(imageNamed: "火柴人跑04"),
+                SKTexture(imageNamed: "火柴人跑03"),
+                SKTexture(imageNamed: "火柴人跑02"),
+                SKTexture(imageNamed: "火柴人跑01"),
+            ]
+        } else {
+            playerAnimationArray = [
+                SKTexture(imageNamed: "火柴人"),
+            ]
+        }
+        let movePlayer = SKAction.moveBy(x: player.size.width*1.7, y: 0, duration: 3)
         let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
         let playerAnimateForever = SKAction.repeatForever(playerAnimate)
         
-        let movePlayer = SKAction.moveBy(x: player.size.width*1.7, y: 0, duration: 3)
+        
         player.run(SKAction.sequence([playerAnimateForever,movePlayer, SKAction.removeFromParent()]),withKey:"playerRun")
         
         //        let moveAndRemoveSequence = SKAction.sequence([movePlayer, SKAction.removeFromParent()])
@@ -176,6 +199,8 @@ class GameScene: SKScene {
     }
     
     func playerLeftRun() {
+        
+        if player.position.y <= frame.minY + UIScreen.main.bounds.height/10 + player.size.height/2 + 45.1 {
         playerAnimationArray = [
             SKTexture(imageNamed: "火柴人跑左01"),
             SKTexture(imageNamed: "火柴人跑左02"),
@@ -187,6 +212,11 @@ class GameScene: SKScene {
             SKTexture(imageNamed: "火柴人跑左02"),
             SKTexture(imageNamed: "火柴人跑左01"),
         ]
+        } else {
+            playerAnimationArray = [
+                SKTexture(imageNamed: "火柴人左"),
+            ]
+        }
         let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
         let playerAnimateForever = SKAction.repeatForever(playerAnimate)
         
@@ -203,6 +233,7 @@ class GameScene: SKScene {
             SKTexture(imageNamed: "火柴人03"),
             SKTexture(imageNamed: "火柴人04"),
             SKTexture(imageNamed: "火柴人05"),
+            SKTexture(imageNamed: "火柴人"),
 
         ]
         
@@ -218,11 +249,46 @@ class GameScene: SKScene {
             SKTexture(imageNamed: "火柴人左03"),
             SKTexture(imageNamed: "火柴人左04"),
             SKTexture(imageNamed: "火柴人左05"),
+            SKTexture(imageNamed: "火柴人左"),
 
         ]
         
         let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
         player.run(playerAnimate, withKey: "playerLeftPunch")
+    }
+    
+    func playerRightJump() {
+
+        playerAnimationArray = [
+            SKTexture(imageNamed: "火柴人跳01"),
+            SKTexture(imageNamed: "火柴人跳02"),
+            SKTexture(imageNamed: "火柴人跳03"),
+            SKTexture(imageNamed: "火柴人跳04"),
+            SKTexture(imageNamed: "火柴人"),
+        ]
+        
+        
+        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
+        let movePlayer = SKAction.moveBy(x: 0, y: player.size.height*1.6, duration: 0.8)
+        player.run(SKAction.sequence([playerAnimate,movePlayer]),withKey:"playerRightJump")
+
+    }
+    
+    func playerLeftJump() {
+
+        playerAnimationArray = [
+            SKTexture(imageNamed: "火柴人跳左01"),
+            SKTexture(imageNamed: "火柴人跳左02"),
+            SKTexture(imageNamed: "火柴人跳左03"),
+            SKTexture(imageNamed: "火柴人跳左04"),
+            SKTexture(imageNamed: "火柴人左"),
+        ]
+        
+        
+        let playerAnimate = SKAction.animate(with: playerAnimationArray, timePerFrame: 0.1)
+        let movePlayer = SKAction.moveBy(x: 0, y: player.size.height*1.6, duration: 0.8)
+        player.run(SKAction.sequence([playerAnimate,movePlayer]),withKey:"playerLeftJump")
+
     }
     
     
@@ -254,7 +320,14 @@ class GameScene: SKScene {
         } else {
             playerLeftPunch()
         }
-
+    }
+    
+    func jump() {
+        if playerFaceRight {
+            playerRightJump()
+        } else {
+            playerLeftJump()
+        }
     }
 }
 
