@@ -86,17 +86,13 @@ class GameScene: SKScene {
         player.position.x = frame.midX
         player.position.y = frame.minY + 400
         player.zPosition = 1
-        
-        addChild(player)
-        
         player.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: player.size.height))
         player.physicsBody?.allowsRotation = false
-
+        player.physicsBody?.restitution = 0
+        addChild(player)
         
         //physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: 0, y: 0), to: CGPoint(x: UIScreen.main.bounds.maxX, y: 0))
-        
-        
         
     }
     
@@ -264,7 +260,7 @@ class GameScene: SKScene {
             SKTexture(imageNamed: "火柴人跳01"),
             SKTexture(imageNamed: "火柴人跳02"),
             SKTexture(imageNamed: "火柴人跳03"),
-            SKTexture(imageNamed: "火柴人跳04"),
+            //SKTexture(imageNamed: "火柴人跳04"),
             SKTexture(imageNamed: "火柴人"),
         ]
         
@@ -281,7 +277,7 @@ class GameScene: SKScene {
             SKTexture(imageNamed: "火柴人跳左01"),
             SKTexture(imageNamed: "火柴人跳左02"),
             SKTexture(imageNamed: "火柴人跳左03"),
-            SKTexture(imageNamed: "火柴人跳左04"),
+            //SKTexture(imageNamed: "火柴人跳左04"),
             SKTexture(imageNamed: "火柴人左"),
         ]
         
